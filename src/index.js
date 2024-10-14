@@ -3,10 +3,10 @@ import { initialCards } from "./scripts/cards";
 import { creatingCard, deleteCard, likeCard } from "./scripts/card";
 import { openModal, closeModal } from "./scripts/modal";
 
-const cardList = document.querySelector(".places__list");
-const popup = document.querySelector(".popup_type_image");
-const imagePopup = popup.querySelector(".popup__image");
-const titlePopup = popup.querySelector(".popup__caption");
+const cardsContainer = document.querySelector(".places__list");
+const popupTypeImage = document.querySelector(".popup_type_image");
+const imagePopup = popupTypeImage.querySelector(".popup__image");
+const titlePopup = popupTypeImage.querySelector(".popup__caption");
 const editPopup = document.querySelector(".popup_type_edit");
 const popupNewCard = document.querySelector(".popup_type_new-card");
 const profilTitle = document.querySelector(".profile__title");
@@ -21,33 +21,34 @@ const cardNameInput = document.querySelector(".popup__input_type_card-name");
 const cardLinkInput = document.querySelector(".popup__input_type_url");
 
 initialCards.forEach((card) => {
-  cardList.append(creatingCard(card, deleteCard, openImage, likeCard));
+  cardsContainer.append(creatingCard(card, deleteCard, openImage, likeCard));
 });
 
 function openImage(card) {
   imagePopup.src = card.link;
   titlePopup.textContent = card.name;
-  openModal(popup);
+  imagePopup.alt = card.name;
+  openModal(popupTypeImage);
 }
 
-function handleFormSubmit(evt) {
+function handleProfileSubmit(evt) {
   evt.preventDefault();
   profilTitle.textContent = nameInput.value;
   profilDiscription.textContent = jobInput.value;
   closeModal(editPopup);
 }
 
-function handlerFormNewProfil() {
+function handlerNewProfil() {
   formElementProfil.name.value = profilTitle.textContent;
   formElementProfil.description.value = profilDiscription.textContent;
   openModal(editPopup);
 }
 
-function handlerFormNewCard() {
+function handlerNewCard() {
   openModal(popupNewCard);
 }
 
-function handleFormSubmitCard(evt) {
+function handleCardSubmit(evt) {
   evt.preventDefault();
   const newCardElement = {
     name: cardNameInput.value,
@@ -59,12 +60,12 @@ function handleFormSubmitCard(evt) {
     openImage,
     likeCard
   );
-  cardList.prepend(cardElement);
+  cardsContainer.prepend(cardElement);
   closeModal(popupNewCard);
   formElementCard.reset();
 }
 
-editProfilButton.addEventListener("click", handlerFormNewProfil);
-addProfilButton.addEventListener("click", handlerFormNewCard);
-formElementProfil.addEventListener("submit", handleFormSubmit);
-formElementCard.addEventListener("submit", handleFormSubmitCard);
+editProfilButton.addEventListener("click", handlerNewProfil);
+addProfilButton.addEventListener("click", handlerNewCard);
+formElementProfil.addEventListener("submit", handleProfileSubmit);
+formElementCard.addEventListener("submit", handleCardSubmit);

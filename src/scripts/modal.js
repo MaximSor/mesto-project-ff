@@ -1,16 +1,16 @@
 export function openModal(popup) {
   popup.classList.add("popup_is-opened");
-  document.addEventListener("keydown", modalClose);
-  popup.addEventListener("click", modalClose);
+  document.addEventListener("keydown", closeModalWindow);
+  popup.addEventListener("click", closeModalWindow);
 }
 
 export function closeModal(popup) {
   popup.classList.remove("popup_is-opened");
-  document.removeEventListener("keydown", modalClose);
-  popup.removeEventListener("click", modalClose);
+  document.removeEventListener("keydown", closeModalWindow);
+  popup.removeEventListener("click", closeModalWindow);
 }
 
-function modalClose(evt) {
+function closeModalWindow(evt) {
   if (
     evt.target.classList.contains("popup__close") ||
     evt.target.classList.contains("popup") ||
