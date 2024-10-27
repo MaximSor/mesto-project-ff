@@ -6,14 +6,14 @@ const config = {
   },
 };
 
-export const getUserData = () => {
+export const getUser = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "GET",
     headers: config.headers,
   }).then((res) => handleResponse(res));
 };
 
-export const getCardsData = () => {
+export const getInitialCard = () => {
   return fetch(`${config.baseUrl}/cards`, {
     method: "GET",
     headers: config.headers,

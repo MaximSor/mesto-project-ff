@@ -6,8 +6,8 @@ import {
 } from "./scripts/card";
 import { openModal, closeModal } from "./scripts/modal";
 import {
-  getUserData,
-  getCardsData,
+  getUser,
+  getInitialCard,
   changeUserData,
   addNewCard,
   deleteCard,
@@ -45,32 +45,19 @@ let userId;
 
 enableValidation(validationConfig);
 
-Promise.all([getUserData(), getCardsData()])
-  .then(([userData, cards]) => {
-    userId = userData._id;
-    profilTitle.textContent = userData.name;
-    profilDiscription.textContent = userData.about;
-    profilImage.setAttribute(
-      "style",
-      `background-image: url(${userData.avatar});`
-    );
-    cards.forEach((card) => {
-      const cardElement = creatingCard(
-        deleteCardHandler,
-        likeCardHandler,
-        openImage,
-        card,
-        userId,
-        likeCard,
-        dislikeCard,
-        deleteCard
-      );
-      cardsContainer.append(cardElement);
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+function renderCard(cardData) {
+  const card = creatingCard(
+    cardData,
+    deleteCardHandler,
+    openImage,
+    likeCardHandler,
+    likeCard,
+    dislikeCard,
+    deleteCard,
+    userId
+  );
+  cardsContainer.prepend(card);
+}
 
 function openImage(evt) {
   imagePopup.src = evt.target.src;
@@ -99,26 +86,13 @@ function handleCardSubmit(evt) {
   const popupPlaceName = formElementCard.elements["place-name"];
   const popupLink = formElementCard.elements.link;
   addNewCard(popupPlaceName.value, popupLink.value)
-    .then((card) => {
-      cardsContainer.prepend(
-        creatingCard(
-          deleteCardHandler,
-          likeCardHandler,
-          openImage,
-          card,
-          userId,
-          likeCard,
-          dislikeCard,
-          deleteCard
-        )
-      );
+    .then((newCard) => {
+      renderCard(newCard);
     })
     .catch((err) => {
       console.log(err);
     })
     .finally((formElementCard.elements.submit.textContent = "Сохранить"));
-  closeModal(popupNewCard);
-  formElementCard.reset();
 }
 
 function handleAvatarSubmit(evt) {
@@ -172,7 +146,7 @@ addProfilButton.addEventListener("click", () => {
 avatarButton.addEventListener("click", () => {
   formElementAvatar.reset();
   const avatarLink = formElementAvatar.elements.link;
-  getUserData()
+  getUser()
     .then((userData) => {
       avatarLink.value = userData.avatar;
     })
@@ -182,3 +156,22 @@ avatarButton.addEventListener("click", () => {
     .finally(clearValidation(formElementAvatar, validationConfig));
   openModal(popupAvatar);
 });
+
+function setInitialData() {
+  Promise.all([getUser(), getInitialCard()])
+    .then(([userData, cards]) => {
+      userId = userData._id;
+      profilTitle.textContent = userData.name;
+      profilDiscription.textContent = userData.about;
+      profilImage.setAttribute(
+        "style",
+        `background-image: url(${userData.avatar});`
+      );
+      cards.forEach(renderCard);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+setInitialData();

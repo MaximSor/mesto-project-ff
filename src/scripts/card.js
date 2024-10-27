@@ -10,6 +10,8 @@ export function creatingCard(
   deleteCard,
   userId
 ) {
+  const title = cardData.name;
+  const image = cardData.link;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
@@ -17,9 +19,9 @@ export function creatingCard(
   const cardLikeCount = cardElement.querySelector(".card__like-counter");
   const cardlikeButton = cardElement.querySelector(".card__like-button");
 
-  cardTitle.textContent = cardData.name;
-  cardImage.src = cardData.link;
-  cardImage.alt = cardData.name;
+  cardTitle.textContent = title;
+  cardImage.src = image;
+  cardImage.alt = title;
   cardLikeCount.textContent = cardData.likes.length;
 
   const checkOwner = (ownerId, userId, cardDeleteButton) => {
