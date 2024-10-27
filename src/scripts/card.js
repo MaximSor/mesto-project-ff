@@ -50,7 +50,7 @@ export function creatingCard(
     );
   });
 
-  cardImage.addEventListener("click", () => openImage(cardData));
+  cardImage.addEventListener("click", openImage);
 
   return cardElement;
 }
