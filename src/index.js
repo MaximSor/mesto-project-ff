@@ -93,6 +93,7 @@ function handleCardSubmit(evt) {
       console.log(err);
     })
     .finally((formElementCard.elements.submit.textContent = "Сохранить"));
+  closeModal(popupNewCard);
 }
 
 function handleAvatarSubmit(evt) {
@@ -157,21 +158,17 @@ avatarButton.addEventListener("click", () => {
   openModal(popupAvatar);
 });
 
-function setInitialData() {
-  Promise.all([getUser(), getInitialCard()])
-    .then(([userData, cards]) => {
-      userId = userData._id;
-      profilTitle.textContent = userData.name;
-      profilDiscription.textContent = userData.about;
-      profilImage.setAttribute(
-        "style",
-        `background-image: url(${userData.avatar});`
-      );
-      cards.forEach(renderCard);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
-
-setInitialData();
+Promise.all([getUser(), getInitialCard()])
+  .then(([userData, cards]) => {
+    userId = userData._id;
+    profilTitle.textContent = userData.name;
+    profilDiscription.textContent = userData.about;
+    profilImage.setAttribute(
+      "style",
+      `background-image: url(${userData.avatar});`
+    );
+    cards.forEach(renderCard);
+  })
+  .catch((err) => {
+    console.log(err);
+  });

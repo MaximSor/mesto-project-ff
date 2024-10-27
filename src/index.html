@@ -51,7 +51,7 @@
               required
               minlength="2"
               maxlength="40"
-              pattern="[a-zA-Zа-яА-я_\s\-]+"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
               data-value-missing="Вы пропустили это поле."
               data-pattern-mismatch="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
             />
@@ -65,7 +65,7 @@
               required
               minlength="2"
               maxlength="200"
-              pattern="[a-zA-Zа-яА-я_\s]+"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
               data-value-missing="Вы пропустили это поле."
               data-pattern-mismatch="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
             />
@@ -88,7 +88,7 @@
               class="popup__input popup__input_type_card-name"
               placeholder="Название"
               required
-              pattern="[a-zA-Zа-яА-я_\s\-]+"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
               minlength="2"
               maxlength="30"
               data-value-missing="Вы пропустили это поле."
