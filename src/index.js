@@ -61,6 +61,7 @@ function renderCard(cardData) {
 
 function openImage(evt) {
   imagePopup.src = evt.target.src;
+  imagePopup.alt = evt.target.alt;
   titlePopup.textContent = evt.target.alt;
   openModal(popupTypeImage);
 }
@@ -69,64 +70,64 @@ function handleProfileSubmit(evt) {
   evt.preventDefault();
   const popupName = formElementProfil.elements.name.value;
   const popupDescription = formElementProfil.elements.description.value;
+  formElementProfil.elements.submit.textContent = "Сохранение...";
   changeUserData(popupName, popupDescription)
     .then((userData) => {
       profilTitle.textContent = userData.name;
       profilDiscription.textContent = userData.about;
+      closeModal(editPopup);
     })
     .catch((err) => {
       console.log(err);
     })
-    .finally((formElementProfil.elements.submit.textContent = "Сохранить"));
-  closeModal(editPopup);
+    .finally(() => {
+      formElementProfil.elements.submit.textContent = "Сохранить";
+    });
 }
 
 function handleCardSubmit(evt) {
   evt.preventDefault();
   const popupPlaceName = formElementCard.elements["place-name"];
   const popupLink = formElementCard.elements.link;
+  formElementCard.elements.submit.textContent = "Сохранение...";
   addNewCard(popupPlaceName.value, popupLink.value)
     .then((newCard) => {
       renderCard(newCard);
+      closeModal(popupNewCard);
     })
     .catch((err) => {
       console.log(err);
     })
-    .finally((formElementCard.elements.submit.textContent = "Сохранить"));
-  closeModal(popupNewCard);
+    .finally(() => {
+      formElementCard.elements.submit.textContent = "Сохранить";
+    });
 }
 
 function handleAvatarSubmit(evt) {
   evt.preventDefault();
   const popupLink = formElementAvatar.elements.link;
+  formElementAvatar.elements.submit.textContent = "Сохранение...";
   editAvatar(popupLink.value)
     .then((res) => {
       profilImage.setAttribute(
         "style",
         `background-image: url(${res.avatar});`
       );
+      closeModal(popupAvatar);
     })
     .catch((err) => {
       console.log(err);
     })
-    .finally((formElementAvatar.elements.submit.textContent = "Сохранить"));
-  closeModal(popupAvatar);
+    .finally(() => {
+      formElementAvatar.elements.submit.textContent = "Сохранить";
+    });
 }
 
-formElementProfil.addEventListener("submit", (evt) => {
-  formElementProfil.elements.submit.textContent = "Сохранение...";
-  handleProfileSubmit(evt);
-});
+formElementProfil.addEventListener("submit", handleProfileSubmit);
 
-formElementCard.addEventListener("submit", (evt) => {
-  formElementCard.elements.submit.textContent = "Сохранение...";
-  handleCardSubmit(evt);
-});
+formElementCard.addEventListener("submit", handleCardSubmit);
 
-formElementAvatar.addEventListener("submit", (evt) => {
-  formElementAvatar.elements.submit.textContent = "Сохранение...";
-  handleAvatarSubmit(evt);
-});
+formElementAvatar.addEventListener("submit", handleAvatarSubmit);
 
 editProfilButton.addEventListener("click", () => {
   formElementProfil.reset();
@@ -147,14 +148,8 @@ addProfilButton.addEventListener("click", () => {
 avatarButton.addEventListener("click", () => {
   formElementAvatar.reset();
   const avatarLink = formElementAvatar.elements.link;
-  getUser()
-    .then((userData) => {
-      avatarLink.value = userData.avatar;
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(clearValidation(formElementAvatar, validationConfig));
+  avatarLink.value = "";
+  clearValidation(formElementAvatar, validationConfig);
   openModal(popupAvatar);
 });
 
